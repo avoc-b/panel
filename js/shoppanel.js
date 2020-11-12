@@ -262,4 +262,14 @@ $(function(){
     // глобальный цвет
     panel.color();
 
+    var x = new XMLHttpRequest();
+    x.open("GET", "panel.html", true);
+    x.onload = function() {
+        if(x.status != 200) return console.warn('XMLHttpRequest: error');
+
+        console.log(x.responseText);
+        $('body').prepend(x.responseText);
+    }
+    x.send();
+
 });
