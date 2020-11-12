@@ -1,6 +1,6 @@
 $(function(){
 
-    var elBox = $('.shoppanel-box');
+    var elBox;
     var panel = {
         open: function(e){
             e.preventDefault();
@@ -240,6 +240,20 @@ $(function(){
             }, 5000);
         },
         init: function() {
+            elBox = $('.shoppanel-box');
+
+            // сдвиг рабочей области на высоту панели
+            $('body').css('margin-top','80px');
+
+            // первый элемент на редакцию
+            $('[data-edit]').not('[data-group], img').first().trigger('click');
+
+            // глобальный цвет
+            panel.color();
+
+            // закрытие заставки
+            panel.loader(false);
+
             $(document)
                 .on('click', '[data-edit]', panel.open)
                 .on('click', '[data-format]', panel.format)
@@ -248,15 +262,6 @@ $(function(){
                 .on('change', elBox.find('input:file'), panel.upload)
                 .on('keyup change drop paste focusin focusout', '[data-edit] textarea', panel.resize)
                 .on('click', '[data-save]', panel.save);
-
-            // закрытие заставки
-            panel.loader(false);
-
-            // первый элемент на редакцию
-            $('[data-edit]').not('[data-group]').first().trigger('click');
-
-            // глобальный цвет
-            panel.color();
         },
     };
 
