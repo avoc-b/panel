@@ -1,2 +1,102 @@
+        <!-- Панель магазина (начало) -->
+        
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+			<a class="navbar-brand" href="#">Shop Panel</a>
+			<ul class="navbar-nav mr-auto">
+				<li class="navbar-text">ЦВЕТ: основной</li>
+				<li class="navbar-text ml-2 mr-4">
+				  <span class="shoppanel-picker" data-initialcolor="#26cae5" data-color="main"></span>
+				</li>
+				<li class="navbar-text">фоновый</li>
+				<li class="navbar-text ml-2 mr-4">
+				  <span class="shoppanel-picker" data-initialcolor="#ffffff" data-color="fon"></span>
+				</li>
+				<li class="navbar-text">при наведении</li>
+				<li class="navbar-text ml-2 mr-4">
+				  <span class="shoppanel-picker" data-initialcolor="#26cae5" data-color="hover"></span>
+				</li>
+			    <li class="nav-item dropdown">
+			      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+			        ШРИФТ
+			      </a>
+			      <div class="dropdown-menu">
+			        <a href="#" class="dropdown-item" data-font="arial">Arial</a>
+			        <a href="#" class="dropdown-item" data-font="Amatic+SC">Amatic SC</a>
+			        <a href="#" class="dropdown-item" data-font="caveat">Caveat</a>
+			        <a href="#" class="dropdown-item" data-font="inter">Inter</a>
+			        <a href="#" class="dropdown-item" data-font="jura">Jura</a>
+			        <a href="#" class="dropdown-item" data-font="montserrat">Montserrat</a>
+			        <a href="#" class="dropdown-item" data-font="Open+Sans">Open Sans</a>
+			        <a href="#" class="dropdown-item" data-font="oswald">Oswald</a>
+			        <a href="#" class="dropdown-item" data-font="philosopher">Philosopher</a>
+			        <a href="#" class="dropdown-item" data-font="raleway">Raleway</a>
+			        <a href="#" class="dropdown-item" data-font="roboto">Roboto</a>
+			        <a href="#" class="dropdown-item" data-font="rubik">Rubik</a>
+			        <a href="#" class="dropdown-item" data-font="tahoma">Tahoma</a>
+			        <a href="#" class="dropdown-item" data-font="verdana">Verdana</a>
+			      </div>
+			    </li>
+			</ul>
+		  	<div class="form-inline my-2 my-lg-0">
+		  		<button type="button" class="btn btn-outline-info my-2 my-sm-0 mr-2">
+		  			<i class="fa fa-user"></i> Кабинет
+		  		</button>
+				<button class="btn btn-info my-2 my-sm-0" type="button" data-save="on">Сохранить изменения</button>
+		    </div>
+		</nav>
 
-<h1>AAAAAAAAA</h1>
+		<div class="shoppanel-box">
+			<div class="btn-group">
+				<button type="button" class="btn btn-outline-info" data-format="bold">
+					<i class="fa fa-bold"></i>
+				</button>
+				<div class="btn-group">
+					<button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-text-height"></i>
+					</button>
+					<div class="dropdown-menu">
+						<button class="dropdown-item" data-format="size" data-val="10">10</button>
+						<button class="dropdown-item" data-format="size" data-val="12">12</button>
+						<button class="dropdown-item" data-format="size" data-val="14">14</button>
+						<button class="dropdown-item" data-format="size" data-val="16">16</button>
+						<button class="dropdown-item" data-format="size" data-val="20">20</button>
+						<button class="dropdown-item" data-format="size" data-val="24">24</button>
+						<button class="dropdown-item" data-format="size" data-val="28">28</button>
+						<button class="dropdown-item" data-format="size" data-val="32">32</button>
+						<button class="dropdown-item" data-format="size" data-val="36">36</button>
+						<button class="dropdown-item" data-format="size" data-val="40">40</button>
+				    </div>
+				</div>
+				<div class="btn-group">
+					<button type="button" class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown">
+						<i class="fa fa-tint"></i>
+					</button>
+					<div class="dropdown-menu">
+						<button class="dropdown-item" data-format="color" data-val="#000">Чёрный</button>
+						<button class="dropdown-item" data-format="color" data-val="#555">Серый</button>
+						<button class="dropdown-item" data-format="color" data-val="#fff">Белый</button>
+						<button class="dropdown-item" data-format="color" data-val="#900">Красный</button>
+						<button class="dropdown-item" data-format="color" data-val="#090">Зелёный</button>
+						<button class="dropdown-item" data-format="color" data-val="#009">Синий</button>
+				    </div>
+				</div>					
+				<button type="button" class="btn btn-outline-info" data-upload="img">
+					<i class="fa fa-upload"></i> Загрузить изображение
+				</button>
+			</div>
+
+			<input type="file" id="file" name="file" accept="image/*" style="display: none;" />
+		</div>
+
+
+		<div class="shoppanel-load">
+			<div>
+				<h4>Подготовка к работе</h4>
+				<button class="btn btn-info" disabled>
+					<span class="spinner-border spinner-border-sm"></span>
+					Подождите...
+				</button>
+			</div>
+		</div>
+	
+	    <!-- Панель магазина (конец) -->

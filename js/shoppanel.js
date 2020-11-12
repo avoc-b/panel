@@ -239,37 +239,33 @@ $(function(){
                 }, 2000);
             }, 5000);
         },
-    };
+        init: function() {
+            $(document)
+                .on('click', '[data-edit]', panel.open)
+                .on('click', '[data-format]', panel.format)
+                .on('click', '[data-upload]', panel.file)
+                .on('click', '[data-font]', panel.font)
+                .on('change', elBox.find('input:file'), panel.upload)
+                .on('keyup change drop paste focusin focusout', '[data-edit] textarea', panel.resize)
+                .on('click', '[data-save]', panel.save);
 
-    $(document)
-        .on('click', '[data-edit]', panel.open)
-        .on('click', '[data-format]', panel.format)
-        .on('click', '[data-upload]', panel.file)
-        .on('click', '[data-font]', panel.font)
-        .on('change', elBox.find('input:file'), panel.upload)
-        .on('keyup change drop paste focusin focusout', '[data-edit] textarea', panel.resize)
-        .on('click', '[data-save]', panel.save);
+            // закрытие заставки
+            panel.loader(false);
+
+            // первый элемент на редакцию
+            $('[data-edit]').not('[data-group]').first().trigger('click');
+
+            // глобальный цвет
+            panel.color();
+        },
+    };
 
 
     console.clear();
 
-    // закрытие заставки
-    panel.loader(false);
-
-    // первый элемент на редакцию
-    $('[data-edit]').not('[data-group]').first().trigger('click');
-
-    // глобальный цвет
-    panel.color();
-
-    var x = new XMLHttpRequest();
-    x.open("GET", "panel.html", true);
-    x.onload = function() {
-        if(x.status != 200) return console.warn('XMLHttpRequest: error');
-
-        console.log(x.responseText);
-        $('body').prepend(x.responseText);
-    }
-    x.send();
+    // загрузка и встака панели в шаблон
+    $('<div>', {id: 'shoppanel'})
+        .appendTo('body')
+        .load('panel.html', null, panel.init);
 
 });
