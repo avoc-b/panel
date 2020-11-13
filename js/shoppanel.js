@@ -109,7 +109,7 @@ $(function(){
                 wrap = data.val ? self.parent().prev() : self,
                 isset= wrap.is('.btn-outline-info'); // нажата или нет
 
-            console.log('[format]', data, isset, wrap, elem);
+            //console.log('[format]', data, isset, wrap, elem);
 
             if(data.val) {
                 wrap.addClass('btn-info').removeClass('btn-outline-info');
@@ -206,7 +206,7 @@ $(function(){
             
             elem.html(css);
             $(this).addClass('active').siblings().removeClass('active');
-            console.log('[font]', font, css);	
+            //console.log('[font]', font, css);	
         },
         resize: function(e) {
 
@@ -242,6 +242,15 @@ $(function(){
         init: function() {
             elBox = $('.shoppanel-box');
 
+            $(document)
+                .on('click', '[data-edit]', panel.open)
+                .on('click', '[data-format]', panel.format)
+                .on('click', '[data-upload]', panel.file)
+                .on('click', '[data-font]', panel.font)
+                .on('change', elBox.find('input:file'), panel.upload)
+                .on('keyup change drop paste focusin focusout', '[data-edit] textarea', panel.resize)
+                .on('click', '[data-save]', panel.save);            
+            
             // сдвиг рабочей области на высоту панели
             $('body').css('margin-top','80px');
 
@@ -254,14 +263,6 @@ $(function(){
             // закрытие заставки
             panel.loader(false);
 
-            $(document)
-                .on('click', '[data-edit]', panel.open)
-                .on('click', '[data-format]', panel.format)
-                .on('click', '[data-upload]', panel.file)
-                .on('click', '[data-font]', panel.font)
-                .on('change', elBox.find('input:file'), panel.upload)
-                .on('keyup change drop paste focusin focusout', '[data-edit] textarea', panel.resize)
-                .on('click', '[data-save]', panel.save);
         },
     };
 
