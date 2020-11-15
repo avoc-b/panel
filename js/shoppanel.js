@@ -41,6 +41,7 @@ $(function(){
                 //console.log('[open:img]', elBox.find('[data-upload]'));
 
                 self.addClass('shoppanel-upload');
+                self.parent().removeClass('shoppanel-imgedit');
 
                 // скрыть кнопки форматирования
                 elBox.find('[data-upload]').show()
@@ -126,9 +127,15 @@ $(function(){
                 case 'color': elem.css('color', isset||data.val ? data.val : ''); break;
             }
         },
+        hoverOn: function(f) {
+            $(this).not('.shoppanel-upload').parent().addClass('shoppanel-imgedit');
+        },
+        hoverOff: function(f) {
+            $(this).parent().removeClass('shoppanel-imgedit');
+        },
         file: function(e) {
             elBox.find('input:file').trigger('click');
-
+            
             //console.log('[upload]', elBox.find('input:file'));
         },
         upload: function(e) {
@@ -251,6 +258,8 @@ $(function(){
                 .on('click', '[data-font]', panel.font)
                 .on('change', elBox.find('input:file'), panel.upload)
                 .on('keyup change drop paste focusin focusout', '[data-edit] textarea', panel.resize)
+                .on('mouseenter', '[data-edit="img"]', panel.hoverOn)
+                .on('mouseout', '[data-edit="img"]', panel.hoverOff)
                 .on('click', '[data-save]', panel.save);            
             
             // сдвиг рабочей области на высоту панели

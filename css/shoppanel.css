@@ -65,3 +65,22 @@
 .shoppanel-box .btn-group .btn:nth-of-type(3) {
     border-radius: .25rem;
 }
+
+.shoppanel-imgedit::after {
+    content: "\f085"; /* \f044 */
+    display: block;
+    background-color: rgba(0,0,0, 1);
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    font: normal normal normal 48px/1 "Font Awesome 5 Free";
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    padding-top: 12%;
+    pointer-events: none;
+    cursor: pointer;
+    opacity: 0.2;
+}
