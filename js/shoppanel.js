@@ -1,32 +1,8 @@
 $(function(){
-    var _image;
-    var _cropper;
-    var cropArg = {
-        viewMode: 3,
-        autoCropArea: 1,
-        guides: false,
-        minContainerWidth: 600,
-        minContainerHeight: 200,
-        background: false,
-        ready() {
-          var transform = _image.style.transform,
-            left = /translateX\(([-\d]+)px\)/g.exec(transform),
-            top = /translateY\(([-\d]+)px\)/g.exec(transform),
-            scaleX = /scaleX\(([-\d]+)\)/g.exec(transform);
-
-          this.cropper.setCanvasData({
-            width   : parseInt(_image.style.width),
-            height  : parseInt(_image.style.height),
-            left    : left ? parseInt(left[1]) : 0,
-            top     : top ? parseInt(top[1]) : 0,
-          });
-
-          if(scaleX) this.cropper.setData({
-            scaleX : parseInt(scaleX[1]),
-          });
-        }
-      };
     var elBox;
+    var _image;
+    var _cropper = false;
+    var _cropArg;
     var panel = {
         open: function(e) {
             e.preventDefault();
@@ -66,8 +42,10 @@ $(function(){
             if(edit.edit == 'img') {
                 //console.log('[open:img]', elBox.find('[data-image]'));
 
+                var wrap = self.parent();
+
                 self.addClass('shoppanel-upload');
-                self.parent().removeClass('shoppanel-imgedit');
+                wrap.removeClass('shoppanel-imgedit');
 
                 // скрыть кнопки форматирования
                 elBox.children('.btn-group').eq(1).show()
@@ -75,8 +53,37 @@ $(function(){
                     .eq(0).hide();
 
                 // запуск кропера
-                _image = self.get(0);
-                _cropper = new Cropper(_image, cropArg);
+                _image = this;
+                _cropArg = {
+                    viewMode: 3,
+                    // dragMode: 'move',
+                    autoCropArea: 1,
+                    // restore: false,
+                    // modal: false,
+                    guides: false,
+                    cropBoxResizable: false,
+                    minContainerWidth: wrap.width(),
+                    minContainerHeight: wrap.height(),
+                    background: false,
+                    ready: function() {        
+                        var transform = _image.style.transform,
+                            left = /translateX\(([-\d]+)px\)/g.exec(transform),
+                            top = /translateY\(([-\d]+)px\)/g.exec(transform),
+                            scaleX = /scaleX\(([-\d]+)\)/g.exec(transform);
+                
+                        this.cropper.setCanvasData({
+                            width   : parseInt(_image.style.width),
+                            height  : parseInt(_image.style.height),
+                            left    : left ? parseInt(left[1]) : 0,
+                            top     : top ? parseInt(top[1]) : 0,
+                        });
+                
+                        if(scaleX) this.cropper.setData({
+                            scaleX : parseInt(scaleX[1]),
+                        });
+                    }
+                };
+                _cropper = new Cropper(this, _cropArg);
             }
             
             var size = self.offset(),
@@ -129,6 +136,22 @@ $(function(){
                 self.parent().text(text);
             });
             $('.shoppanel-upload').removeClass('shoppanel-upload');
+
+            // изображения
+            if(_cropper) {
+                var canvas = _cropper.getCanvasData();
+                var data = _cropper.getData();
+                var transform = 'translateX('+ Math.round(canvas.left) +'px) translateY('+ Math.round(canvas.top) +'px)';
+
+                if(data.scaleX) transform += ' scaleX('+ data.scaleX +')';
+
+                _image.style.width     = Math.round(canvas.width) +'px';
+                _image.style.height    = Math.round(canvas.height) +'px';
+                _image.style.transform = transform; //'translateX('+ Math.round(canvas.left) +'px) translateY('+ Math.round(canvas.top) +'px)';        
+                _image.style.opacity   = '';
+
+                _cropper.destroy();
+            }
         },
         format: function(e) {
 
@@ -177,6 +200,9 @@ $(function(){
                 elem  = $('.shoppanel-upload');
 
             elem.attr('src', URL.createObjectURL(files[0]));
+
+            _cropper.destroy();
+            _cropper = new Cropper(_image, _cropArg);
 
             //console.log('[file]', files[0]);
         },
@@ -286,6 +312,7 @@ $(function(){
             elBox = $('.shoppanel-box');
 
             $(document)
+                .on('click', 'a', false)
                 .on('click', '[data-edit]', panel.open)
                 .on('click', '[data-format]', panel.format)
                 .on('click', '[data-image]', panel.image)
