@@ -1,8 +1,34 @@
 $(function(){
+    var _image;
+    var _cropper;
+    var cropArg = {
+        viewMode: 3,
+        autoCropArea: 1,
+        guides: false,
+        minContainerWidth: 600,
+        minContainerHeight: 200,
+        background: false,
+        ready() {
+          var transform = _image.style.transform,
+            left = /translateX\(([-\d]+)px\)/g.exec(transform),
+            top = /translateY\(([-\d]+)px\)/g.exec(transform),
+            scaleX = /scaleX\(([-\d]+)\)/g.exec(transform);
 
+          this.cropper.setCanvasData({
+            width   : parseInt(_image.style.width),
+            height  : parseInt(_image.style.height),
+            left    : left ? parseInt(left[1]) : 0,
+            top     : top ? parseInt(top[1]) : 0,
+          });
+
+          if(scaleX) this.cropper.setData({
+            scaleX : parseInt(scaleX[1]),
+          });
+        }
+      };
     var elBox;
     var panel = {
-        open: function(e){
+        open: function(e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -32,21 +58,25 @@ $(function(){
                 $.proxy(panel.resize, textarea.get(0))();
 
                 // скрыть кнопку "загрузить фото"
-                elBox.find('[data-upload]').hide()
+                elBox.children('.btn-group').eq(1).hide()
                     .end()
-                    .find('[data-format], [data-color], .btn-group .btn-group').show();
+                    .eq(0).show();
             }
 
             if(edit.edit == 'img') {
-                //console.log('[open:img]', elBox.find('[data-upload]'));
+                //console.log('[open:img]', elBox.find('[data-image]'));
 
                 self.addClass('shoppanel-upload');
                 self.parent().removeClass('shoppanel-imgedit');
 
                 // скрыть кнопки форматирования
-                elBox.find('[data-upload]').show()
+                elBox.children('.btn-group').eq(1).show()
                     .end()
-                    .find('[data-format], [data-color], .btn-group .btn-group').hide();
+                    .eq(0).hide();
+
+                // запуск кропера
+                _image = self.get(0);
+                _cropper = new Cropper(_image, cropArg);
             }
             
             var size = self.offset(),
@@ -88,7 +118,7 @@ $(function(){
                 else btn.addClass('btn-outline-info').removeClass('btn-info');						
             });
         },
-        closeAll: function(){
+        closeAll: function() {
             $('.shoppanel-input').each(function(i, v){
 
                 var self = $(v),
@@ -100,7 +130,7 @@ $(function(){
             });
             $('.shoppanel-upload').removeClass('shoppanel-upload');
         },
-        format: function(e){
+        format: function(e) {
 
             var self = $(this),
                 data = self.data(),
@@ -133,10 +163,14 @@ $(function(){
         hoverOff: function(f) {
             $(this).parent().removeClass('shoppanel-imgedit');
         },
-        file: function(e) {
-            elBox.find('input:file').trigger('click');
-            
-            //console.log('[upload]', elBox.find('input:file'));
+        image: function(e) {
+            switch(this.dataset.image) {
+                case 'upload': elBox.find('input:file').trigger('click'); break;
+                case 'more': _cropper.zoom(0.1); break;
+                case 'less': _cropper.zoom(-0.1); break;
+                case 'scaleX': _cropper.scaleX(_cropper.getData().scaleX == -1 ? 1 : -1); break;
+            }
+            //console.log('[image]', this.dataset.image, elBox.find('input:file'));
         },
         upload: function(e) {
             var files = e.target.files,
@@ -146,7 +180,7 @@ $(function(){
 
             //console.log('[file]', files[0]);
         },
-        color: function() {							
+        color: function() {
             // цвета поумолчанию
             var css 	= $('#css-main').text(),
                 clrMain = /a {\s+color: ([#\w]+);/g.exec(css),
@@ -254,7 +288,7 @@ $(function(){
             $(document)
                 .on('click', '[data-edit]', panel.open)
                 .on('click', '[data-format]', panel.format)
-                .on('click', '[data-upload]', panel.file)
+                .on('click', '[data-image]', panel.image)
                 .on('click', '[data-font]', panel.font)
                 .on('change', elBox.find('input:file'), panel.upload)
                 .on('keyup change drop paste focusin focusout', '[data-edit] textarea', panel.resize)
