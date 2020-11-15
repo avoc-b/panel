@@ -11,7 +11,7 @@ $(function(){
                 text = self.text(),
                 rows = text.split('\n').length;						
 
-            console.log('[open]', self, text, edit);
+            //console.log('[open]', self, text, edit);
 
             // если открыто на редакцию, то ничего
             if(self.find('.shoppanel-input').length) return;
@@ -34,18 +34,18 @@ $(function(){
                 // скрыть кнопку "загрузить фото"
                 elBox.find('[data-upload]').hide()
                     .end()
-                    .find('[data-format], .btn-group .btn-group').show();
+                    .find('[data-format], [data-color], .btn-group .btn-group').show();
             }
 
             if(edit.edit == 'img') {
-                console.log('[open:img]', elBox.find('[data-upload]'));
+                //console.log('[open:img]', elBox.find('[data-upload]'));
 
                 self.addClass('shoppanel-upload');
 
                 // скрыть кнопки форматирования
                 elBox.find('[data-upload]').show()
                     .end()
-                    .find('[data-format], .btn-group .btn-group').hide();
+                    .find('[data-format], [data-color], .btn-group .btn-group').hide();
             }
             
             var size = self.offset(),
@@ -155,7 +155,7 @@ $(function(){
             });
 
             // выбор цвета
-            $('.shoppanel-picker').colorPick({
+            $('[data-color]').colorPick({
                 paletteLabel: 'Выберите цвет',
                 allowCustomColor: true,
                 // initialColor: '#27ae60',
@@ -172,10 +172,12 @@ $(function(){
                         elem = $('#css-main'),
                         css  = elem.text();
 
-                    this.element.css({
-                        backgroundColor: this.color, 
-                        color: this.color
-                    });
+                    if(type == 'elem') {
+                        $('.shoppanel-input').parent().css('color', this.color);
+                        return;
+                    }                    
+                                        
+                    this.element.css({ backgroundColor: this.color });
 
                     switch(type) {
                         case 'main'	: css = css.replace(/(a {\s+color: )([#\w]+);/g, '$1'+ this.color +';'); break;
@@ -183,7 +185,7 @@ $(function(){
                         case 'hover': css = css.replace(/(a:hover {\s+color: )([#\w]+);/g, '$1'+ this.color +';'); break;
                     }
                     
-                    elem.html(css);
+                    elem.html(css);                                       
                     //console.log('[colorPick]', this, this.color, type, css);						    
                 },
             });
