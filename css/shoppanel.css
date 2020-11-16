@@ -4,8 +4,9 @@
     border: 0 none;
     /*box-shadow: 0 0 2px #17a2b8;*/
     outline: 1px dashed;
-    padding: 0 5px;
+    padding: 0;
     width: 100%;
+    display: block;
 
     /* для принятия родительских стилей */
     font-size: unset;

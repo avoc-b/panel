@@ -11,7 +11,8 @@ $(function(){
             var self = $(this)
                 edit = self.data(),
                 text = self.text(),
-                rows = text.split('\n').length;						
+                rows = text.split('\n').length,
+                size = {};						
 
             //console.log('[open]', self, text, edit);
 
@@ -37,6 +38,9 @@ $(function(){
                 elBox.children('.btn-group').eq(1).hide()
                     .end()
                     .eq(0).show();
+                
+                size    = self.offset();
+                size.h  = self.outerHeight();
             }
 
             if(edit.edit == 'img') {
@@ -51,6 +55,9 @@ $(function(){
                 elBox.children('.btn-group').eq(1).show()
                     .end()
                     .eq(0).hide();
+                
+                size    = wrap.offset();
+                size.h  = wrap.outerHeight();
 
                 // запуск кропера
                 _image = this;
@@ -85,20 +92,18 @@ $(function(){
                 };
                 _cropper = new Cropper(this, _cropArg);
             }
-            
-            var size = self.offset(),
+
+            var top = size.top + size.h +5,
                 // видимая часть экрана:
                 win = {
                     top: $(window).scrollTop(),
                     bottom: $(window).scrollTop() + $(window).height()
                 };
-            size.h = self.outerHeight();
-            var top = size.top + size.h +5;
 
             if(win.bottom < top + elBox.outerHeight()) {
                 top = size.top - elBox.outerHeight() -5;
             }
-            //console.log('[open]', size.top, size.h, elBox.outerHeight());
+            //console.log('[open]', size, win);
 
             elBox.css({
                 top: top,
